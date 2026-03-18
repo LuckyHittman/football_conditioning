@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FRC Bulldogs – Weather Sucks Indoor Conditioning</title>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --panel: #141414;
+      --border: #2a2a2a;
+      --accent: #e8c840;
+      --accent2: #e85c20;
+      --text: #f0f0f0;
+      --sub: #888;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow Condensed', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 32px;
+    }
+
+    /* ── Header ── */
+    header {
+      width: 100%;
+      max-width: 1100px;
+      text-align: center;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .dog-strip {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .paw {
+      font-size: 1.1rem;
+      opacity: 0.35;
+      animation: pawPulse 2.4s ease-in-out infinite;
+    }
+    .paw:nth-child(2) { animation-delay: 0.3s; }
+    .paw:nth-child(3) { animation-delay: 0.6s; }
+    .paw:nth-child(4) { animation-delay: 0.9s; }
+    .paw:nth-child(5) { animation-delay: 1.2s; }
+    @keyframes pawPulse { 0%,100%{opacity:.2} 50%{opacity:.7} }
+
+    h1 {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 3rem);
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    h1 .highlight {
+      color: var(--accent);
+    }
+    h1 .hot {
+      color: var(--accent2);
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      font-size: 1rem;
+      color: var(--sub);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .divider {
+      margin: 16px auto 0;
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      border-radius: 2px;
+    }
+
+    /* ── Grid Frame ── */
+    .frame {
+      width: 100%;
+      max-width: 1100px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 60px rgba(232,200,64,0.06), 0 0 0 1px #1e1e1e;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+
+    /* ── Quadrant ── */
+    .quad {
+      position: relative;
+      background: var(--panel);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 0 18px;
+      min-height: 300px;
+      overflow: hidden;
+      transition: background 0.25s;
+    }
+
+    /* borders between quadrants */
+    .quad:nth-child(1),
+    .quad:nth-child(2) { border-bottom: 2px solid var(--border); }
+    .quad:nth-child(1),
+    .quad:nth-child(3) { border-right: 2px solid var(--border); }
+
+    .quad:hover {
+      background: #191919;
+    }
+
+    /* corner badge */
+    .badge {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-transform: uppercase;
+      background: rgba(232,200,64,0.08);
+      border: 1px solid rgba(232,200,64,0.2);
+      border-radius: 3px;
+      padding: 3px 7px;
+    }
+
+    /* gif container */
+    .gif-wrap {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 16px 12px;
+    }
+
+    .gif-wrap img {
+      max-width: 100%;
+      max-height: 220px;
+      object-fit: contain;
+      border-radius: 4px;
+      filter: brightness(0.95);
+    }
+
+    /* placeholder shown when no gif src */
+    .gif-placeholder {
+      width: 180px;
+      height: 180px;
+      border: 2px dashed var(--border);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--sub);
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 16px;
+    }
+    .gif-placeholder .icon { font-size: 2rem; opacity: 0.4; }
+
+    /* label */
+    .label {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-align: center;
+      padding: 0 16px;
+      line-height: 1.3;
+    }
+    .label .detail {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--sub);
+      margin-top: 3px;
+      letter-spacing: 0.05em;
+      text-transform: none;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 20px;
+      font-size: 0.75rem;
+      color: #444;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .quad { min-height: 220px; }
+      .gif-wrap img { max-height: 140px; }
+      .gif-placeholder { width: 120px; height: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="dog-strip">
+      <span class="paw">🐾</span><span class="paw">🐾</span><span class="paw">🐾</span><span class="paw">🐾</span><span class="paw">🐾</span>
+    </div>
+    <h1>FRC <span class="highlight">Bulldogs</span> &mdash; <span class="hot">"Weather Sucks"</span><br>Indoor Conditioning</h1>
+    <p class="subtitle">Stay sharp. Stay ready. Rain, snow, or blizzard.</p>
+    <div class="divider"></div>
+  </header>
+
+  <div class="frame">
+    <div class="grid">
+
+      <!-- TOP LEFT: Single-leg balance -->
+      <div class="quad">
+        <span class="badge">Top Left</span>
+        <div class="gif-wrap">
+          <!--
+            REPLACE the src below with your actual GIF path, e.g.:
+            src="gifs/single-leg-balance.gif"
+          -->
+          <div class="gif-placeholder">
+            <span class="icon">🦵</span>
+            Place GIF here<br><em>single-leg-balance.gif</em>
+          </div>
+        </div>
+        <div class="label">
+          Single-Leg Balance
+          <span class="detail">Hold still — own your base</span>
+        </div>
+      </div>
+
+      <!-- TOP RIGHT: Balance + reach -->
+      <div class="quad">
+        <span class="badge">Top Right</span>
+        <div class="gif-wrap">
+          <!--
+            src="gifs/balance-reach.gif"
+          -->
+          <div class="gif-placeholder">
+            <span class="icon">↕️</span>
+            Place GIF here<br><em>balance-reach.gif</em>
+          </div>
+        </div>
+        <div class="label">
+          Balance + Reach
+          <span class="detail">Forward · Back · Side · Diagonal</span>
+        </div>
+      </div>
+
+      <!-- BOTTOM LEFT: Push-ups -->
+      <div class="quad">
+        <span class="badge">Bottom Left</span>
+        <div class="gif-wrap">
+          <!--
+            src="gifs/pushups.gif"
+          -->
+          <div class="gif-placeholder">
+            <span class="icon">💪</span>
+            Place GIF here<br><em>pushups.gif</em>
+          </div>
+        </div>
+        <div class="label">
+          Push-Ups
+          <span class="detail">Chest to floor, lock it out</span>
+        </div>
+      </div>
+
+      <!-- BOTTOM RIGHT: Dead bug -->
+      <div class="quad">
+        <span class="badge">Bottom Right</span>
+        <div class="gif-wrap">
+          <!--
+            src="gifs/deadbug.gif"
+          -->
+          <div class="gif-placeholder">
+            <span class="icon">🐛</span>
+            Place GIF here<br><em>deadbug.gif</em>
+          </div>
+        </div>
+        <div class="label">
+          Dead Bug
+          <span class="detail">Core stability · slow &amp; controlled</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>FRC Bulldogs &mdash; Indoor Training Program</footer>
+
+</body>
+</html>
